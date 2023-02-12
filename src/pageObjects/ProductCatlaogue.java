@@ -1,5 +1,7 @@
 package pageObjects;
 
+import java.util.List;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -8,10 +10,13 @@ import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-public class ProductCatlaogue {
+import AbstractComponents.AbstractComponent;
+
+public class ProductCatlaogue extends AbstractComponent{
 	 WebDriver driver;
 
 	public ProductCatlaogue(WebDriver driverObject){
+		super(driverObject);
 		this.driver = driverObject;
 		PageFactory.initElements(driverObject, this);
 	}
@@ -25,20 +30,37 @@ public class ProductCatlaogue {
 	@FindBy(xpath="//body/app-root[1]/app-profile[1]/app-sidebar[1]/nav[1]/ul[1]/li[4]/button[1]")
 	WebElement viewCart;
 	
+	@FindBy(css=".mb-3")
+	List<WebElement> products;
 	
+	@FindBy(css=".ng-animating")
+	WebElement spinner;
+	
+	By productsBy = By.cssSelector(".mb-3");
+	By addToCart = By.cssSelector(".card-body button:last-of-type");
+	By toastMessage = By.cssSelector("#oast-container");
 	
 	//Actions:
-	public void selectCoat(){
-		addToCartCoat.click();
+	
+	public List <WebElement> getProductsList(){
+		waitForElementToAppear(productsBy);
+		return products;
 	}
 	
-	public void selectAddidasShoe(){
-		addToCartAddidas.click();
+	public WebElement getProductByName(String productName) {
+		WebElement filteredProduct = getProductsList().stream().filter(product -> 
+		product.findElement(By.cssSelector("b")).getText().equals(productName)).findFirst().orElse(null);
+		return filteredProduct;
+		
 	}
-	
-	public boolean validateCoat(){
-		return addToCartCoat.isDisplayed();
+	public void addProductToCart(String productName) {
+		WebElement product = getProductByName(productName);
+		product.findElement(addToCart).click();
+		waitForElementToAppear(toastMessage);
+		waitForElementToDissappear(spinner);
+
 	}
+
 	
 	public void viewCart(WebDriverWait wait){
 		   WebElement cart = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//body/app-root[1]/app-dashboard[1]/app-sidebar[1]/nav[1]/ul[1]/li[4]/button[1]/i[1]")));

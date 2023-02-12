@@ -1,7 +1,9 @@
 import java.time.Duration;
+import java.util.List;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -26,15 +28,15 @@ public class SubmitOrderTest {
 
 		  
 		   ProductCatlaogue productsPage = new ProductCatlaogue(driver);
-		   productsPage.selectAddidasShoe();
 		   
-		   Thread.sleep(2000);
-		  
-		   productsPage.selectCoat();
+		   List<WebElement> productsList = productsPage.getProductsList();
 		   
-		   productsPage.viewCart(wait);
+		   System.out.println(productsList.size());
 		   
+		   productsPage.addProductToCart("ADIDAS ORIGINAL");
+		   productsPage.addProductToCart("ZARA COAT 3");
 
+		 
 	}
 
 }
