@@ -7,36 +7,29 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.testng.Assert;
 
+import pageObjects.CartPage;
 import pageObjects.LoginPage;
 import pageObjects.ProductCatlaogue;
 
 public class SubmitOrderTest {
 
 	public static void main(String[] args) throws InterruptedException {
-		// TODO Auto-generated method stub
-
-		  String baseURL = "https://rahulshettyacademy.com/client/";
-		  WebDriver driver = new ChromeDriver();
-		  driver.get(baseURL);
-		  LoginPage loginPage = new LoginPage(driver);
-		  loginPage.clickLogin("dasari.jayalakshmi17@gmail.com", "JayalakshmiTest123");
-		  
-		    //14. wait until you get success message 
-		    WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-		    wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("products")));
-
-		  
-		   ProductCatlaogue productsPage = new ProductCatlaogue(driver);
-		   
-		   List<WebElement> productsList = productsPage.getProductsList();
-		   
-		   System.out.println(productsList.size());
-		   
-		   productsPage.addProductToCart("ADIDAS ORIGINAL");
-		   productsPage.addProductToCart("ZARA COAT 3");
-
-		 
+		String baseURL = "https://rahulshettyacademy.com/client/";
+		WebDriver driver = new ChromeDriver();
+		driver.get(baseURL);
+		LoginPage loginPage = new LoginPage(driver);
+		ProductCatlaogue productsPage = loginPage.clickLogin("dasari.jayalakshmi17@gmail.com", "JayalakshmiTest123");
+		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+		wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("products")));
+		String productName = "ADIDAS ORIGINAL";
+		List<WebElement> productsList = productsPage.getProductsList();
+		productsPage.addProductToCart(productName);
+		CartPage cartPage = productsPage.gotoCartPage();
+		Boolean match = cartPage.verifyProductDisplay(productName);
+		Assert.assertTrue(match);
+		cartPage.checkOut();
 	}
 
 }

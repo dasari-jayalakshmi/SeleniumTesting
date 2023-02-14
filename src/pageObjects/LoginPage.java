@@ -28,9 +28,11 @@ public class LoginPage extends AbstractComponent{
 		
 		
 		//Actions:
-		public void clickLogin(String email, String password){
+		public ProductCatlaogue clickLogin(String email, String password){
 			userEmail.sendKeys(email);
 			userPassword.sendKeys(password);
 			login.click();
+			ProductCatlaogue productCatlaogue = new ProductCatlaogue(driver);
+			return productCatlaogue;
 		}
 }
