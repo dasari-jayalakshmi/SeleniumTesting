@@ -1,2 +1,4 @@
-
-target/classes/META-INF/maven/Selenium/Selenium/pom.properties
+.classpath
+.project
+.settings/
+target/
