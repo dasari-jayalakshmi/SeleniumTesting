@@ -10,6 +10,8 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 
 import pageObjects.CartPage;
+import pageObjects.CheckOutPage;
+import pageObjects.ConfirmationPage;
 import pageObjects.LoginPage;
 import pageObjects.ProductCatlaogue;
 
@@ -24,12 +26,15 @@ public class SubmitOrderTest {
 		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
 		wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("products")));
 		String productName = "ADIDAS ORIGINAL";
-		List<WebElement> productsList = productsPage.getProductsList();
 		productsPage.addProductToCart(productName);
 		CartPage cartPage = productsPage.gotoCartPage();
 		Boolean match = cartPage.verifyProductDisplay(productName);
 		Assert.assertTrue(match);
-		cartPage.checkOut();
+
+		CheckOutPage checkoutPage = cartPage.goToCheckOut();
+		checkoutPage.selectCountry("Canada");
+		ConfirmationPage confirmationPage = checkoutPage.submitOrder();
+
 	}
 
 }
